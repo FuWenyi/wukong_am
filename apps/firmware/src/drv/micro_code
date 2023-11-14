@@ -1,0 +1,681 @@
+#define MICRO_CODE_NUM   16
+#define NAND_READ_STATUS_70_PTR   6'd0
+#define NAND_ERASE_PTR   6'd1
+#define NAND_WRITE_PTR   6'd2
+#define NAND_READ_PTR    6'd3
+#define NAND_READ_DATA_PTR   6'4
+#define NAND_CACHE_READ_END_PTR   6'd5
+#define NAND_SET_FEATURE_89_PTR   6'd6
+#define NAND_SET_FEATURE_8A_PTR   6'd7
+#define NAND_READ_STATUS_71_PTR   6'd8
+#define NAND_READ_STATUS_73_PTR   6'd9
+#define NAND_READ_STATUS_78_PTR   6'd10
+#define NAND_SINGLE_ERASE_PTR   6'd11
+#define NAND_SLC_WRITE_PTR   6'd12
+#define NAND_SINGLE_WRITE_PTR   6'd13
+#define NAND_SLC_SINGLE_WRITE_PTR   6'd14
+#define NAND_SLC_READ_PTR   6'd15
+
+
+#define MODE_SLC   0xA2
+
+#define FLG_SG  0x0     // erase flag: single erase
+#define FLG_MT  0x1     // erase flag: multi erase
+
+
+//instruction
+#define INST_WRITE 0x0000
+#define INST_MOVE  0x8000
+#define INST_JUMP  0xC000
+  #define JUMP_EQFW  0x10
+  #define JUMP_EQBK  0x11
+  #define JUMP_NEBK  0x15
+  #define JUMP_NCFW  0x18
+  #define JUMP_NCBK  0x19
+#define INST_SHIFT 0xE000
+  #define SHIFT_RL4  0x14 //REG_P0 << 4
+#define INST_OPRT  0xF000
+  #define OPRT_ADD   0x01
+  #define OPRT_AND   0x04
+#define INST_NOP   0xFFFF
+#define INST_FIN   0xFFFE
+
+//register address
+#define NAND_READ  0x00
+#define NAND_WRITE 0x04
+#define NAND_WRITE1 0x05
+#define NAND_WRITE2 0x06
+#define NAND_WRITE3 0x07
+#define NAND_RDMA  0x08
+#define NAND_WDMA  0x0C
+#define NAND_CMD   0x10
+#define NAND_ADR   0x14
+#define NAND_CEN   0x18
+#define NAND_WAIT  0x1C
+
+#define PROC_REG0  0x20
+#define PROC_REG1  0x21
+
+#define PROC_REG10 0x30
+#define PROC_REG11 0x31
+#define PROC_REG12 0x32
+#define PROC_REG13 0x33
+#define PROC_REG14 0x34
+#define PROC_REG15 0x35
+#define PROC_REG16 0x36
+#define PROC_REG17 0x37
+#define PROC_REG18 0x38
+#define PROC_REG19 0x39
+#define PROC_REG1A 0x3A
+#define PROC_REG1B 0x3B
+#define PROC_REG1C 0x3C
+#define PROC_REG1D 0x3D
+#define PROC_REG1E 0x3E
+#define PROC_REG1F 0x3F
+
+// each lunce has an independent 8bytes register in R23~R31
+#define PROC_R23   0x37 /* The value of R23 is set(value is plane_qnty) on the system is powered on and remains unchanged. */
+#define PROC_R24   0x38 /* R24~R27 used by suspend&resume */
+#define PROC_R25   0x39 /* R24~R27 used by suspend&resume */
+#define PROC_R26   0x3A /* R24~R27 used by suspend&resume */
+#define PROC_R27   0x3B /* R24~R27 used by suspend&resume */
+#define PROC_R28   0x3C /* not used */
+#define PROC_R29   0x3D /* not used */
+#define PROC_R30   0x3E /* not used */
+#define PROC_R31   0x3F /* not used */
+
+#define CPU_INFO   0x42
+#define CAH_STS    0x48
+  #define RCAH_SET   0x01
+#define CEN_NUM    0x4C
+#define SINGLE_PL  0x4E
+#define COL_ADR1   0x52
+#define COL_ADR2   0x53
+#define ROW_ADR1   0x54
+#define ROW_ADR2   0x55
+#define ROW_ADR3   0x56
+#define ROW_ADR4   0x57
+#define OSPG_NUM   0x57
+#define NAND_RDT   0x58
+#define SET_BUSY   0x60
+  #define FRC_RSTS   0x30
+  #define BUSY_BIT   0x20
+#define STS_DATA   0x61
+#define SET_PLANE  0x62
+#define DMA_STS    0x64
+
+//NAND command
+#define READ_PAGE  0x00
+#define READ_MTPL  0x32
+#define READ_END   0x30
+#define RCAH_CMD   0x31
+#define RCAH_END   0x3F
+#ifdef NAND_BICS5
+#define RCOL_CMD   0x05
+#else
+#define RCOL_CMD   0x06
+#endif
+#define RCOL_END   0xE0
+
+#define PROG_CMD   0x80
+#define PROG_MTPL  0x11
+#define PROG_END   0x10
+#define PROG_MED   0x1A //for Kioxia NAND only
+
+#define ERAS_CMD   0x60
+#define ERAS_MTPL  0xD1 //for Micron NAND only
+#define ERAS_END   0xD0
+#define SETF_CMD   0xD5
+
+#define READ_STS   0x70
+  #define STS_RDY    0x60
+
+//wait timer
+#ifdef NAND_2400M //use B58R timing
+  #define WAIT_TWB     47  //wait tWB(B58R:80ns, B47R:100ns)
+  #define WAIT_TADL    89  //wait tADL(150ns)
+  #define WAIT_TCCS    164 //wait tCCS(B58R:275ns, B47R:400ns)
+#elif defined(NAND_1600M) //use B47R timing
+  #define WAIT_TWB     39  //wait tWB(B58R:80ns, B47R:100ns)
+  #define WAIT_TADL    59  //wait tADL(150ns)
+  #define WAIT_TCCS    159 //wait tCCS(B58R:275ns, B47R:400ns)
+#else //FPGA mode, NAND_500M, use B47R timing
+  #define WAIT_TWB     12  //wait tWB(B58R:80ns, B47R:100ns)
+  #define WAIT_TADL    18  //wait tADL(150ns)
+  #define WAIT_TCCS    49  //wait tCCS(B58R:275ns, B47R:400ns)
+#endif
+
+//other
+#define CEN_OFF    0x80
+#define WAIT_TRPH    8
+#define PLANE_END  (  PLANE_QNTY -   1)
+#define OSPG_END     3
+
+
+const word gw_micro_code[][64] = {
+//wire [0:64*16-1] micro_code [MICRO_CODE_NUM];
+
+//read status command, cmd_ptr = 6'd0
+//assign micro_code[0] =
+{
+(INST_MOVE  | (CEN_NUM   << 7) | NAND_CEN ), //enable CEn
+(INST_WRITE | (READ_STS  << 7) | NAND_CMD ), //send read status cmd(0x70) to NAND
+(INST_WRITE | (0x0       << 7) | NAND_READ), //read status
+#ifdef PROC_TDLY
+(INST_MOVE  | (NAND_RDT  << 7) | PROC_REG0), //dummy read for FPGA timing issue
+#endif
+(INST_MOVE  | (NAND_RDT  << 7) | STS_DATA ), //move NAND read data to status check reg
+#ifdef NAND_BICS5
+(INST_WRITE | (CEN_OFF   << 7) | NAND_CEN ), //disable CEn
+(INST_WRITE | (WAIT_TRPH << 7) | NAND_WAIT), //need wait tRPSTH(15/25ns)
+#endif
+(INST_FIN                                   )  //finish
+},
+
+//multi-plane erase command, cmd_ptr = 6'd1
+//assign micro_code[1] =
+{
+(INST_MOVE  | (CEN_NUM   << 7) | NAND_CEN ), //enable CEn
+(INST_WRITE | (0x0       << 7) | SET_PLANE), //init plane number
+#ifdef B47R_SLC
+(INST_WRITE | (0x3B      << 7) | NAND_CMD ), //send SLC mode cmd(0x3B) to NAND
+#endif
+(INST_WRITE | (ERAS_CMD  << 7) | NAND_CMD ), //send erase cmd(0x60) to NAND
+(INST_MOVE  | (ROW_ADR1  << 7) | NAND_ADR ), //send row adr1 to NAND
+(INST_MOVE  | (ROW_ADR2  << 7) | NAND_ADR ), //send row adr2 to NAND
+(INST_MOVE  | (ROW_ADR3  << 7) | NAND_ADR ), //send row adr3 to NAND
+#ifdef NAND_B47R
+(INST_MOVE  | (ROW_ADR4  << 7) | NAND_ADR ), //send row adr4 to NAND
+#endif
+(INST_MOVE  | (SET_PLANE << 7) | PROC_REG0), //copy "current plane" to processor reg0
+(INST_WRITE | (PLANE_END << 7) | PROC_REG1), //set "plane end number" to processor reg1
+#ifdef NAND_BICS5
+(INST_JUMP  | (JUMP_EQFW << 8) |   3      ), //compare plane number, if plane fin, jump to "erase end cmd"
+#elif defined(PROC_TDLY)
+(INST_JUMP  | (JUMP_EQFW << 8) |   12     ), //compare plane number, if plane fin, jump to "erase end cmd"
+#else
+(INST_JUMP  | (JUMP_EQFW << 8) |   11     ), //compare plane number, if plane fin, jump to "erase end cmd"
+#endif
+(INST_OPRT  | (OPRT_ADD  << 7) | SET_PLANE), //add plane number
+#ifdef NAND_BICS5
+(INST_JUMP  | (JUMP_NCBK << 8) |   8      ), //jump back to "erase cmd"
+#else
+(INST_WRITE | (ERAS_MTPL << 7) | NAND_CMD ), //send erase multi-plane cmd(0xD1) to NAND
+(INST_WRITE | (WAIT_TWB  << 7) | NAND_WAIT), //need wait tWB(80/90/100ns)
+(INST_WRITE | (READ_STS  << 7) | NAND_CMD ), //send read status cmd(0x70) to NAND
+(INST_WRITE | (0x0       << 7) | NAND_READ), //read status
+#ifdef PROC_TDLY
+(INST_MOVE  | (NAND_RDT  << 7) | PROC_REG0), //dummy read for FPGA timing issue
+#endif
+(INST_MOVE  | (NAND_RDT  << 7) | PROC_REG0), //copy NAND read data to processor reg0
+(INST_WRITE | (STS_RDY   << 7) | PROC_REG1), //set nand_ready_bitmap(0x60) to processor reg1
+(INST_OPRT  | (OPRT_AND  << 7) | PROC_REG0), //sts_data & nand_ready_bitmap(0x60)
+#ifdef PROC_TDLY
+#ifdef NAND_B47R
+(INST_JUMP  | (JUMP_EQBK << 8) |   17     ), //check whether NAND ready, if ready, jump back to "erase cmd"
+#else
+(INST_JUMP  | (JUMP_EQBK << 8) |   16     ), //check whether NAND ready, if ready, jump back to "erase cmd"
+#endif
+(INST_JUMP  | (JUMP_NCBK << 8) |   7      ), //jump to "read status cmd"
+#else
+#ifdef NAND_B47R
+(INST_JUMP  | (JUMP_EQBK << 8) |   16     ), //check whether NAND ready, if ready, jump back to "erase cmd"
+#else
+(INST_JUMP  | (JUMP_EQBK << 8) |   15     ), //check whether NAND ready, if ready, jump back to "erase cmd"
+#endif
+(INST_JUMP  | (JUMP_NCBK << 8) |   6      ), //jump to "read status cmd"
+#endif
+#endif //NAND_BICS5
+(INST_WRITE | (ERAS_END  << 7) | NAND_CMD ), //send erase end(0xD0) to NAND
+(INST_WRITE | (FRC_RSTS  << 7) | SET_BUSY ), //set nand status as busy and force read status
+(INST_FIN                                   )  //finish
+},
+
+//multi-plane program command, cmd_ptr = 6'd2
+//assign micro_code[2] =
+{
+(INST_MOVE  | (CEN_NUM   << 7) | NAND_CEN ), //enable CEn
+(INST_WRITE | (0x0       << 7) | SET_PLANE), //init plane number
+//(INST_MOVE  | (ROW_ADR1  << 7) | 0x30     ), //record row adr1
+//(INST_MOVE  | (ROW_ADR2  << 7) | 0x31     ), //record row adr2
+//(INST_MOVE  | (ROW_ADR3  << 7) | 0x32     ), //record row adr3
+#ifdef NAND_BICS5
+(INST_MOVE  | (OSPG_NUM  << 7) | NAND_CMD ), //send "one shot page number(0x01/0x02/0x03)" to NAND
+#endif
+#ifdef B47R_SLC
+(INST_WRITE | (0x3B      << 7) | NAND_CMD ), //send SLC mode cmd(0x3B) to NAND
+#endif
+(INST_WRITE | (PROG_CMD  << 7) | NAND_CMD ), //send program cmd(0x80) to NAND
+(INST_WRITE | (0x0       << 7) | NAND_ADR ), //send column adr1 to NAND
+(INST_WRITE | (0x0       << 7) | NAND_ADR ), //send column adr2 to NAND
+(INST_MOVE  | (ROW_ADR1  << 7) | NAND_ADR ), //send row adr1 to NAND
+(INST_MOVE  | (ROW_ADR2  << 7) | NAND_ADR ), //send row adr2 to NAND
+(INST_MOVE  | (ROW_ADR3  << 7) | NAND_ADR ), //send row adr3 to NAND
+#ifdef NAND_B47R
+(INST_MOVE  | (ROW_ADR4  << 7) | NAND_ADR ), //send row adr4 to NAND
+#endif
+(INST_WRITE | (WAIT_TADL << 7) | NAND_WAIT), //need wait tADL(150ns)
+(INST_WRITE | (0x0       << 7) | NAND_WDMA), //enable DMA write engine
+(INST_MOVE  | (SET_PLANE << 7) | PROC_REG0), //copy "current plane" to processor reg0
+(INST_WRITE | (PLANE_END << 7) | PROC_REG1), //set "plane end number" to processor reg1
+#ifdef PROC_TDLY
+(INST_JUMP  | (JUMP_EQFW << 8) |   12     ), //compare plane number, if plane fin, jump to "program end cmd"
+#else
+(INST_JUMP  | (JUMP_EQFW << 8) |   11     ), //compare plane number, if plane fin, jump to "program end cmd"
+#endif
+(INST_OPRT  | (OPRT_ADD  << 7) | SET_PLANE), //add plane number
+(INST_WRITE | (PROG_MTPL << 7) | NAND_CMD ), //send program multi-plane cmd(0x11) to NAND
+(INST_WRITE | (WAIT_TWB  << 7) | NAND_WAIT), //need wait tWB(80/90/100ns)
+(INST_WRITE | (READ_STS  << 7) | NAND_CMD ), //send read status cmd(0x70) to NAND
+(INST_WRITE | (0x0       << 7) | NAND_READ), //read status
+#ifdef PROC_TDLY
+(INST_MOVE  | (NAND_RDT  << 7) | PROC_REG0), //dummy read for FPGA timing issue
+#endif
+(INST_MOVE  | (NAND_RDT  << 7) | PROC_REG0), //copy NAND read data to processor reg0
+(INST_WRITE | (STS_RDY   << 7) | PROC_REG1), //set nand_ready_bitmap(0x60) to processor reg1
+(INST_OPRT  | (OPRT_AND  << 7) | PROC_REG0), //sts_data & nand_ready_bitmap(0x60)
+#ifdef PROC_TDLY
+#ifdef NAND_B27B
+(INST_JUMP  | (JUMP_EQBK << 8) |   20     ), //check whether NAND ready, if ready, jump back to "program cmd"
+#else
+(INST_JUMP  | (JUMP_EQBK << 8) |   21     ), //check whether NAND ready, if ready, jump back to "program cmd"
+#endif
+(INST_JUMP  | (JUMP_NCBK << 8) |   7      ), //jump to "read status cmd"
+#else
+#ifdef NAND_B27B
+(INST_JUMP  | (JUMP_EQBK << 8) |   19     ), //check whether NAND ready, if ready, jump back to "program cmd"
+#else
+(INST_JUMP  | (JUMP_EQBK << 8) |   20     ), //check whether NAND ready, if ready, jump back to "program cmd"
+#endif
+(INST_JUMP  | (JUMP_NCBK << 8) |   6      ), //jump to "read status cmd"
+#endif
+#ifdef NAND_BICS5
+(INST_MOVE  | (OSPG_NUM  << 7) | PROC_REG0), //copy "one shot page number" to processor reg0
+(INST_WRITE | (OSPG_END  << 7) | PROC_REG1), //set "one shot page end(3)" to processor reg1
+(INST_JUMP  | (JUMP_EQFW << 8) |   3      ), //compare one shot page number, if is 3, jump to "program end cmd"
+(INST_WRITE | (PROG_MED  << 7) | NAND_CMD ), //send program medium(0x1A) to NAND
+(INST_JUMP  | (JUMP_NCFW << 8) |   2      ), //jump to "set nand status"
+#endif
+(INST_WRITE | (PROG_END  << 7) | NAND_CMD ), //send program end(0x10) to NAND
+(INST_WRITE | (FRC_RSTS  << 7) | SET_BUSY ), //set nand status as busy and force read status
+(INST_FIN                                   )  //finish
+},
+
+//multi-plane read command, cmd_ptr = 6'd3
+//assign micro_code[3] =
+{
+(INST_MOVE  | (CEN_NUM   << 7) | NAND_CEN ), //enable CEn
+(INST_MOVE  | (SINGLE_PL << 7) | PROC_REG0), //move single_plane to processor reg0
+(INST_SHIFT | (SHIFT_RL4 << 7) | SET_PLANE), //init plane number, 0x10:single plane, 0x0:multi-plane
+#ifdef NAND_BICS5
+(INST_MOVE  | (OSPG_NUM  << 7) | NAND_CMD ), //send "one shot page number(0x01/0x02/0x03)" to NAND
+#endif
+#ifdef B47R_SLC
+(INST_WRITE | (0x3B      << 7) | NAND_CMD ), //send SLC mode cmd(0x3B) to NAND
+#endif
+(INST_WRITE | (READ_PAGE << 7) | NAND_CMD ), //send read cmd(0x00) to NAND
+(INST_WRITE | (0x0       << 7) | NAND_ADR ), //send column adr1 to NAND
+(INST_WRITE | (0x0       << 7) | NAND_ADR ), //send column adr2 to NAND
+(INST_MOVE  | (ROW_ADR1  << 7) | NAND_ADR ), //send row adr1 to NAND
+(INST_MOVE  | (ROW_ADR2  << 7) | NAND_ADR ), //send row adr2 to NAND
+(INST_MOVE  | (ROW_ADR3  << 7) | NAND_ADR ), //send row adr3 to NAND
+#ifdef NAND_B47R
+(INST_MOVE  | (ROW_ADR4  << 7) | NAND_ADR ), //send row adr4 to NAND
+#endif
+(INST_MOVE  | (SET_PLANE << 7) | PROC_REG0), //copy "current plane" to processor reg0
+(INST_WRITE | (0x10      << 7) | PROC_REG1), //set 0x10(imply single plane) to processor reg1
+#ifdef PROC_TDLY
+(INST_JUMP  | (JUMP_EQFW << 8) |   14     ), //compare plane, if single plane, jump to "read end cmd"
+#else
+(INST_JUMP  | (JUMP_EQFW << 8) |   13     ), //compare plane, if single plane, jump to "read end cmd"
+#endif
+(INST_WRITE | (PLANE_END << 7) | PROC_REG1), //set "plane end number" to processor reg1
+#ifdef PROC_TDLY
+(INST_JUMP  | (JUMP_EQFW << 8) |   12     ), //compare plane number, if plane fin, jump to "read end cmd"
+#else
+(INST_JUMP  | (JUMP_EQFW << 8) |   11     ), //compare plane number, if plane fin, jump to "read end cmd"
+#endif
+(INST_OPRT  | (OPRT_ADD  << 7) | SET_PLANE), //add plane number
+(INST_WRITE | (READ_MTPL << 7) | NAND_CMD ), //send read multi-plane cmd(0x32) to NAND
+(INST_WRITE | (WAIT_TWB  << 7) | NAND_WAIT), //need wait tWB(80/90/100ns)
+(INST_WRITE | (READ_STS  << 7) | NAND_CMD ), //send read status cmd(0x70) to NAND
+(INST_WRITE | (0x0       << 7) | NAND_READ), //read status
+#ifdef PROC_TDLY
+(INST_MOVE  | (NAND_RDT  << 7) | PROC_REG0), //dummy read for FPGA timing issue
+#endif
+(INST_MOVE  | (NAND_RDT  << 7) | PROC_REG0), //copy NAND read data to processor reg0
+(INST_WRITE | (STS_RDY   << 7) | PROC_REG1), //set nand_ready_bitmap(0x60) to processor reg1
+(INST_OPRT  | (OPRT_AND  << 7) | PROC_REG0), //sts_data & nand_ready_bitmap(0x60)
+#ifdef PROC_TDLY
+#ifdef NAND_B27B
+(INST_JUMP  | (JUMP_EQBK << 8) |   20     ), //check whether NAND ready, if ready, jump back to "read cmd"
+#else
+(INST_JUMP  | (JUMP_EQBK << 8) |   21     ), //check whether NAND ready, if ready, jump back to "read cmd"
+#endif
+(INST_JUMP  | (JUMP_NCBK << 8) |   7      ), //jump to "read status cmd"
+#else
+#ifdef NAND_B27B
+(INST_JUMP  | (JUMP_EQBK << 8) |   19     ), //check whether NAND ready, if ready, jump back to "read cmd"
+#else
+(INST_JUMP  | (JUMP_EQBK << 8) |   20     ), //check whether NAND ready, if ready, jump back to "read cmd"
+#endif
+(INST_JUMP  | (JUMP_NCBK << 8) |   6      ), //jump to "read status cmd"
+#endif
+(INST_MOVE  | (CAH_STS   << 7) | PROC_REG0), //copy "cache status" to processor reg0
+(INST_WRITE | (RCAH_SET  << 7) | PROC_REG1), //set "cache read set" to processor reg1
+(INST_JUMP  | (JUMP_EQFW << 8) |   3      ), //compare cache status, if cache read set, jump to "cache read cmd"
+(INST_WRITE | (READ_END  << 7) | NAND_CMD ), //send read end(0x30) to NAND
+(INST_JUMP  | (JUMP_NCFW << 8) |   2      ), //jump to "set nand status"
+(INST_WRITE | (RCAH_CMD  << 7) | NAND_CMD ), //send cache read(0x31) to NAND
+(INST_WRITE | (BUSY_BIT  << 7) | SET_BUSY ), //set nand status as busy
+(INST_FIN                                   )  //finish
+},
+
+//multi-plane read data, cmd_ptr = 6'd4
+//assign micro_code[4] =
+{
+(INST_MOVE  | (CEN_NUM   << 7) | NAND_CEN ), //enable CEn
+(INST_WRITE | (0x10      << 7) | SET_PLANE), //init plane number
+(INST_WRITE | (RCOL_CMD  << 7) | NAND_CMD ), //send "change read column cmd(0x05/0x06)" to NAND
+(INST_MOVE  | (COL_ADR1  << 7) | NAND_ADR ), //send column adr1 to NAND
+(INST_MOVE  | (COL_ADR2  << 7) | NAND_ADR ), //send column adr2 to NAND
+(INST_MOVE  | (ROW_ADR1  << 7) | NAND_ADR ), //send row adr1 to NAND
+(INST_MOVE  | (ROW_ADR2  << 7) | NAND_ADR ), //send row adr2 to NAND
+(INST_MOVE  | (ROW_ADR3  << 7) | NAND_ADR ), //send row adr3 to NAND
+#ifdef NAND_B47R
+(INST_MOVE  | (ROW_ADR4  << 7) | NAND_ADR ), //send row adr4 to NAND
+#endif
+(INST_WRITE | (RCOL_END  << 7) | NAND_CMD ), //send change read column end(0xE0)" to NAND
+(INST_WRITE | (WAIT_TCCS << 7) | NAND_WAIT), //need wait tCCS(275/400ns)
+(INST_WRITE | (0x0       << 7) | NAND_RDMA), //enable DMA read engine
+(INST_WRITE | (0x0       << 7) | PROC_REG0), //set 0x0 to processor reg0
+(INST_MOVE  | (DMA_STS   << 7) | PROC_REG1), //copy "dma status" to processor reg1
+#ifdef NAND_B47R
+(INST_JUMP  | (JUMP_NEBK << 8) |   12     ), //jump to "change read column cmd"
+#else
+(INST_JUMP  | (JUMP_NEBK << 8) |   11     ), //jump to "change read column cmd"
+#endif
+#ifdef NAND_BICS5
+(INST_WRITE | (CEN_OFF   << 7) | NAND_CEN ), //disable CEn
+(INST_WRITE | (WAIT_TRPH << 7) | NAND_WAIT), //need wait tRPSTH(15/25ns)
+#endif
+(INST_FIN                                   )  //finish
+},
+
+//cache read end, cmd_ptr = 6'd5
+//assign micro_code[5] =
+{
+(INST_MOVE  | (CEN_NUM   << 7) | NAND_CEN ), //enable CEn
+(INST_WRITE | (RCAH_END  << 7) | NAND_CMD ), //send "cache read end(0x3F)" to NAND
+(INST_WRITE | (BUSY_BIT  << 7) | SET_BUSY ), //set nand status as busy
+(INST_FIN                                   )  //finish
+},
+
+//set feature1, cmd_ptr = 6'd6
+//assign micro_code[6] =
+{
+(INST_MOVE  | (CEN_NUM   << 7) | NAND_CEN ), //enable CEn
+(INST_WRITE | (SETF_CMD  << 7) | NAND_CMD ), //send set feature to NAND
+(INST_WRITE | (0x00      << 7) | NAND_ADR ), //lun address
+(INST_WRITE | (0x89      << 7) | NAND_ADR ), //feature address
+(INST_WRITE | (WAIT_TADL << 7) | NAND_WAIT), //need wait tADL(150ns)
+(INST_MOVE  | (PROC_REG10<< 7) | NAND_WRITE1 ), //feature data0
+(INST_MOVE  | (PROC_REG10<< 7) | NAND_WRITE ),  //feature data0
+(INST_MOVE  | (PROC_REG11<< 7) | NAND_WRITE1 ), //feature data1
+(INST_MOVE  | (PROC_REG11<< 7) | NAND_WRITE ),  //feature data1
+(INST_MOVE  | (PROC_REG12<< 7) | NAND_WRITE1 ), //feature data2
+(INST_MOVE  | (PROC_REG12<< 7) | NAND_WRITE ),  //feature data2
+(INST_MOVE  | (PROC_REG13<< 7) | NAND_WRITE1 ), //feature data3
+(INST_MOVE  | (PROC_REG13<< 7) | NAND_WRITE ),  //feature data3
+(INST_WRITE | (0xff      << 7) | NAND_WAIT ), //need wait tCCS(275/400ns)
+//(INST_WRITE | (FRC_RSTS  << 7) | SET_BUSY ), //set nand status as busy
+(INST_WRITE | (CEN_OFF   << 7) | NAND_CEN ), //disable CEn
+(INST_WRITE | (WAIT_TRPH << 7) | NAND_WAIT), //need wait tRPSTH(15/25ns)
+(INST_FIN                                   )  //finish
+},
+
+//set feature2, cmd_ptr = 6'd7
+//assign micro_code[7] =
+{
+(INST_MOVE  | (CEN_NUM   << 7) | NAND_CEN ), //enable CEn
+(INST_WRITE | (SETF_CMD  << 7) | NAND_CMD ), //send set feature to NAND
+(INST_WRITE | (0x00      << 7) | NAND_ADR ), //lun address
+(INST_WRITE | (0x8A      << 7) | NAND_ADR ), //feature address
+(INST_WRITE | (WAIT_TADL << 7) | NAND_WAIT), //need wait tADL(150ns)
+(INST_MOVE  | (PROC_REG14<< 7) | NAND_WRITE1 ), //feature data0
+(INST_MOVE  | (PROC_REG14<< 7) | NAND_WRITE ),  //feature data0
+(INST_MOVE  | (PROC_REG15<< 7) | NAND_WRITE1 ), //feature data1
+(INST_MOVE  | (PROC_REG15<< 7) | NAND_WRITE ),  //feature data1
+(INST_MOVE  | (PROC_REG16<< 7) | NAND_WRITE1 ), //feature data2
+(INST_MOVE  | (PROC_REG16<< 7) | NAND_WRITE ),  //feature data2
+(INST_MOVE  | (PROC_REG17<< 7) | NAND_WRITE1 ), //feature data3
+(INST_MOVE  | (PROC_REG17<< 7) | NAND_WRITE ),  //feature data3
+(INST_WRITE | (0xff      << 7) | NAND_WAIT), //need wait tCCS(275/400ns)
+//(INST_WRITE | (FRC_RSTS  << 7) | SET_BUSY ), //set nand status as busy
+(INST_WRITE | (CEN_OFF   << 7) | NAND_CEN ), //disable CEn
+(INST_WRITE | (WAIT_TRPH << 7) | NAND_WAIT), //need wait tRPSTH(15/25ns)
+(INST_FIN                                   )  //finish
+},
+
+//read status 71 command, cmd_ptr = 6'd8
+//assign micro_code[8] =
+{
+(INST_MOVE  | (CEN_NUM   << 7) | NAND_CEN ), //enable CEn
+(INST_WRITE | (0x71      << 7) | NAND_CMD ), //send read status cmd(0x71) to NAND
+(INST_WRITE | (0x0       << 7) | NAND_READ), //read status
+#ifdef PROC_TDLY
+(INST_MOVE  | (NAND_RDT  << 7) | PROC_REG0), //dummy read for FPGA timing issue
+#endif
+(INST_MOVE  | (NAND_RDT  << 7) | STS_DATA ), //move NAND read data to status check reg
+(INST_WRITE | (CEN_OFF   << 7) | NAND_CEN ), //disable CEn
+(INST_WRITE | (WAIT_TRPH << 7) | NAND_WAIT), //need wait tRPSTH(15/25ns)
+(INST_FIN                                 )  //finish
+},
+
+//read status 73 command, cmd_ptr = 6'd9
+// Read Status returns the status value for the previous operation in each plane on a single LUN
+//assign micro_code[9] =
+{
+(INST_MOVE  | (CEN_NUM   << 7) | NAND_CEN ), //enable CEn
+(INST_WRITE | (0x73      << 7) | NAND_CMD ), //send read status cmd(0x73) to NAND
+(INST_WRITE | (0x0       << 7) | NAND_READ), //read status
+#ifdef PROC_TDLY
+(INST_MOVE  | (NAND_RDT  << 7) | PROC_REG0), //dummy read for FPGA timing issue
+#endif
+(INST_MOVE  | (NAND_RDT  << 7) | STS_DATA ), //move NAND read data to status check reg
+(INST_WRITE | (CEN_OFF   << 7) | NAND_CEN ), //disable CEn
+(INST_WRITE | (WAIT_TRPH << 7) | NAND_WAIT), //need wait tRPSTH(15/25ns)
+(INST_FIN                                  ) //finish
+},
+
+//read status enhanced 78 command, cmd_ptr = 6'd10
+// Read Status Enhanced function can be used to check Pass/Fail status of selected LUN and Plane specified by row address setting.
+// Thus, the function requires row address setting steps before reading status value.
+//assign micro_code[10] =
+{
+(INST_MOVE  | (CEN_NUM   << 7) | NAND_CEN ), //enable CEn
+(INST_WRITE | (0x78      << 7) | NAND_CMD ), //send read status cmd(0x78) to NAND
+(INST_MOVE  | (ROW_ADR1  << 7) | NAND_ADR ),
+(INST_MOVE  | (ROW_ADR2  << 7) | NAND_ADR ),
+(INST_MOVE  | (ROW_ADR3  << 7) | NAND_ADR ),
+(INST_WRITE | (0x0       << 7) | NAND_READ), //read status
+#ifdef PROC_TDLY
+(INST_MOVE  | (NAND_RDT  << 7) | PROC_REG0), //dummy read for FPGA timing issue
+#endif
+(INST_MOVE  | (NAND_RDT  << 7) | STS_DATA ), //move NAND read data to status check reg
+(INST_WRITE | (CEN_OFF   << 7) | NAND_CEN ), //disable CEn
+(INST_WRITE | (WAIT_TRPH << 7) | NAND_WAIT), //need wait tRPSTH(15/25ns)
+(INST_FIN                                  ) //finish
+},
+
+// single erase command, cmd_ptr = 6'd11
+//assign micro_code[11] =
+{
+(INST_MOVE  | (CEN_NUM   << 7) | NAND_CEN ), //enable CEn
+// (INST_WRITE | (PECM_CHOS << 7) | STS_CHOS ), //chose status check bit
+// (INST_MOVE  | (PROC_INFO << 7) | MSG_SEL  ), //set lunce info to chose R24~R31
+(INST_WRITE | (FLG_SG    << 7) | PROC_R24 ), //save is multi: flag to resume
+(INST_MOVE  | (ROW_ADR1  << 7) | PROC_R25 ), //cache save row addr1
+(INST_MOVE  | (ROW_ADR2  << 7) | PROC_R26 ), //cache save row addr2
+(INST_MOVE  | (ROW_ADR3  << 7) | PROC_R27 ), //cache save row addr3
+(INST_MOVE  | (SINGLE_PL << 7) | PROC_REG0), //move single_plane to processor reg0
+(INST_SHIFT | (SHIFT_RL4 << 7) | SET_PLANE), //init plane number, 0x10:single plane, 0x0:multi-plane
+(INST_WRITE | (ERAS_CMD  << 7) | NAND_CMD ), //send erase cmd(0x60) to NAND
+(INST_MOVE  | (ROW_ADR1  << 7) | NAND_ADR ), //send row adr1 to NAND
+(INST_MOVE  | (ROW_ADR2  << 7) | NAND_ADR ), //send row adr2 to NAND
+(INST_MOVE  | (ROW_ADR3  << 7) | NAND_ADR ), //send row adr3 to NAND
+(INST_WRITE | (ERAS_END  << 7) | NAND_CMD ), //send erase end(0xD0) to NAND
+(INST_WRITE | (FRC_RSTS  << 7) | SET_BUSY ), //set nand status as busy and force read status
+(INST_FIN                                  ) //finish
+},
+
+// multi-plane slc program command, cmd_ptr = 6'd12
+//assign micro_code[12] =
+{
+(INST_MOVE  | (CEN_NUM   << 7) | NAND_CEN ), //enable CEn
+// (INST_WRITE | (PROG_LOWS << 7) | STS_CHOS ), //chose status check bit (with out error bit check)
+(INST_WRITE | (0x0       << 7) | SET_PLANE), //init plane number
+(INST_WRITE | (MODE_SLC  << 7) | NAND_CMD ), //send SLC mode cmd(0xA2) to NAND
+(INST_WRITE | (PROG_CMD  << 7) | NAND_CMD ), //send program cmd(0x80) to NAND
+(INST_WRITE | (0x0       << 7) | NAND_ADR ), //send column adr1 to NAND
+(INST_WRITE | (0x0       << 7) | NAND_ADR ), //send column adr2 to NAND
+(INST_MOVE  | (ROW_ADR1  << 7) | NAND_ADR ), //send row adr1 to NAND
+(INST_MOVE  | (ROW_ADR2  << 7) | NAND_ADR ), //send row adr2 to NAND
+(INST_MOVE  | (ROW_ADR3  << 7) | NAND_ADR ), //send row adr3 to NAND
+(INST_WRITE | (WAIT_TADL << 7) | NAND_WAIT), //need wait tADL(150ns)
+(INST_WRITE | (0x0       << 7) | NAND_WDMA), //enable DMA write engine
+(INST_MOVE  | (SET_PLANE << 7) | PROC_REG0), //copy "current plane" to processor reg0
+(INST_WRITE | (PLANE_END << 7) | PROC_REG1), //set "plane end number(R23)" to processor reg1
+#ifdef PROC_TDLY
+(INST_JUMP  | (JUMP_EQFW << 8) |   12     ), //compare plane number, if plane fin, jump to "program end cmd"
+#else
+(INST_JUMP  | (JUMP_EQFW << 8) |   11     ), //compare plane number, if plane fin, jump to "program end cmd"
+#endif
+(INST_OPRT  | (OPRT_ADD  << 7) | SET_PLANE), //add plane number
+(INST_WRITE | (PROG_MTPL << 7) | NAND_CMD ), //send program multi-plane cmd(0x11) to NAND
+(INST_WRITE | (WAIT_TWB  << 7) | NAND_WAIT), //need wait tWB(80/90/100ns)
+(INST_WRITE | (READ_STS  << 7) | NAND_CMD ), //send read status cmd(0x70) to NAND
+(INST_WRITE | (0x0       << 7) | NAND_READ), //read status
+#ifdef PROC_TDLY
+(INST_MOVE  | (NAND_RDT  << 7) | PROC_REG0), //dummy read for FPGA timing issue
+#endif
+(INST_MOVE  | (NAND_RDT  << 7) | PROC_REG0), //copy NAND read data to processor reg0
+(INST_WRITE | (STS_RDY   << 7) | PROC_REG1), //set nand_ready_bitmap(0x60) to processor reg1
+(INST_OPRT  | (OPRT_AND  << 7) | PROC_REG0), //sts_data & nand_ready_bitmap(0x60)
+#ifdef PROC_TDLY
+(INST_JUMP  | (JUMP_EQBK << 8) |   20     ), //check whether NAND ready, if ready, jump back to "program cmd"
+(INST_JUMP  | (JUMP_NCBK << 8) |   7      ), //jump to "read status cmd"
+#else
+(INST_JUMP  | (JUMP_EQBK << 8) |   19     ), //check whether NAND ready, if ready, jump back to "program cmd"
+(INST_JUMP  | (JUMP_NCBK << 8) |   6      ), //jump to "read status cmd"
+#endif
+(INST_WRITE | (PROG_END  << 7) | NAND_CMD ), //send program end(0x10) to NAND
+// (INST_WRITE | (PECM_CHOS << 7) | STS_CHOS ), //chose status check bit (with error bit check)
+(INST_WRITE | (FRC_RSTS  << 7) | SET_BUSY ), //set nand status as busy and force read status
+(INST_FIN                                  ) //finish
+},
+
+// single-plane program command, cmd_ptr = 6'd13
+//assign micro_code[13] =
+{
+(INST_MOVE  | (CEN_NUM   << 7) | NAND_CEN ), //enable CEn
+// (INST_WRITE | (PROG_LOWS << 7) | STS_CHOS ), //chose status check bit (with out error bit check)
+(INST_MOVE  | (SINGLE_PL << 7) | PROC_REG0), //move single_plane to processor reg0
+(INST_SHIFT | (SHIFT_RL4 << 7) | SET_PLANE), //init plane number, 0x10:single plane, 0x0:multi-plane
+(INST_MOVE  | (OSPG_NUM  << 7) | NAND_CMD ), //send "one shot page number(0x01/0x02/0x03)" to NAND
+(INST_WRITE | (PROG_CMD  << 7) | NAND_CMD ), //send program cmd(0x80) to NAND
+(INST_WRITE | (0x0       << 7) | NAND_ADR ), //send column adr1 to NAND
+(INST_WRITE | (0x0       << 7) | NAND_ADR ), //send column adr2 to NAND
+(INST_MOVE  | (ROW_ADR1  << 7) | NAND_ADR ), //send row adr1 to NAND
+(INST_MOVE  | (ROW_ADR2  << 7) | NAND_ADR ), //send row adr2 to NAND
+(INST_MOVE  | (ROW_ADR3  << 7) | NAND_ADR ), //send row adr3 to NAND
+(INST_WRITE | (WAIT_TADL << 7) | NAND_WAIT), //need wait tADL(150ns)
+(INST_WRITE | (0x0       << 7) | NAND_WDMA), //enable DMA write engine
+(INST_MOVE  | (OSPG_NUM  << 7) | PROC_REG0), //copy "one shot page number" to processor reg0
+(INST_WRITE | (OSPG_END  << 7) | PROC_REG1), //set "one shot page end(3)" to processor reg1
+(INST_JUMP  | (JUMP_EQFW << 8) |   3      ), //compare one shot page number, if is 3, jump to "program end cmd"
+(INST_WRITE | (PROG_MED  << 7) | NAND_CMD ), //send program medium(0x1A) to NAND
+(INST_JUMP  | (JUMP_NCFW << 8) |   3      ), //jump to "set nand status"
+(INST_WRITE | (PROG_END  << 7) | NAND_CMD ), //send program end(0x10) to NAND
+// (INST_WRITE | (PECM_CHOS << 7) | STS_CHOS ), //chose status check bit (with error bit check)
+(INST_WRITE | (FRC_RSTS  << 7) | SET_BUSY ), //set nand status as busy and force read status
+(INST_FIN                                  ) //finish
+},
+
+// single-plane slc program command, cmd_ptr = 6'd14
+//assign micro_code[14] =
+{
+(INST_MOVE  | (CEN_NUM   << 7) | NAND_CEN ), //enable CEn
+// (INST_WRITE | (PROG_LOWS << 7) | STS_CHOS ), //chose status check bit (with out error bit check)
+(INST_MOVE  | (SINGLE_PL << 7) | PROC_REG0), //move single_plane to processor reg0
+(INST_SHIFT | (SHIFT_RL4 << 7) | SET_PLANE), //init plane number, 0x10:single plane, 0x0:multi-plane
+(INST_WRITE | (MODE_SLC  << 7) | NAND_CMD ), //send SLC mode cmd(0xA2) to NAND
+(INST_WRITE | (PROG_CMD  << 7) | NAND_CMD ), //send program cmd(0x80) to NAND
+(INST_WRITE | (0x0       << 7) | NAND_ADR ), //send column adr1 to NAND
+(INST_WRITE | (0x0       << 7) | NAND_ADR ), //send column adr2 to NAND
+(INST_MOVE  | (ROW_ADR1  << 7) | NAND_ADR ), //send row adr1 to NAND
+(INST_MOVE  | (ROW_ADR2  << 7) | NAND_ADR ), //send row adr2 to NAND
+(INST_MOVE  | (ROW_ADR3  << 7) | NAND_ADR ), //send row adr3 to NAND
+(INST_WRITE | (WAIT_TADL << 7) | NAND_WAIT), //need wait tADL(150ns)
+(INST_WRITE | (0x0       << 7) | NAND_WDMA), //enable DMA write engine
+(INST_WRITE | (PROG_END  << 7) | NAND_CMD ), //send program end(0x10) to NAND
+// (INST_WRITE | (PECM_CHOS << 7) | STS_CHOS ), //chose status check bit (with error bit check)
+(INST_WRITE | (FRC_RSTS  << 7) | SET_BUSY ), //set nand status as busy and force read status
+(INST_FIN                                  ) //finish
+},
+
+// slc multi-plane read command, cmd_ptr = 6'd15
+//assign micro_code[15] =
+{
+(INST_MOVE  | (CEN_NUM   << 7) | NAND_CEN ), //enable CEn
+(INST_MOVE  | (SINGLE_PL << 7) | PROC_REG0), //move single_plane to processor reg0
+(INST_SHIFT | (SHIFT_RL4 << 7) | SET_PLANE), //init plane number, 0x10:single plane, 0x0:multi-plane
+(INST_WRITE | (MODE_SLC  << 7) | NAND_CMD ), //send SLC mode cmd(0xA2) to NAND
+(INST_WRITE | (READ_PAGE << 7) | NAND_CMD ), //send read cmd(0x00) to NAND
+(INST_WRITE | (0x0       << 7) | NAND_ADR ), //send column adr1 to NAND
+(INST_WRITE | (0x0       << 7) | NAND_ADR ), //send column adr2 to NAND
+(INST_MOVE  | (ROW_ADR1  << 7) | NAND_ADR ), //send row adr1 to NAND
+(INST_MOVE  | (ROW_ADR2  << 7) | NAND_ADR ), //send row adr2 to NAND
+(INST_MOVE  | (ROW_ADR3  << 7) | NAND_ADR ), //send row adr3 to NAND
+(INST_MOVE  | (SET_PLANE << 7) | PROC_REG0), //copy "current plane" to processor reg0
+(INST_WRITE | (0x10      << 7) | PROC_REG1), //set 0x10(imply single plane) to processor reg1
+#ifdef PROC_TDLY
+(INST_JUMP  | (JUMP_EQFW << 8) |   14     ), //compare plane, if single plane, jump to "read end cmd"
+(INST_MOVE  | (PLANE_END << 7) | PROC_REG1), //set "plane end number(R23)" to processor reg1
+(INST_JUMP  | (JUMP_EQFW << 8) |   12     ), //compare plane number, if plane fin, jump to "read end cmd"
+#else
+(INST_JUMP  | (JUMP_EQFW << 8) |   13     ), //compare plane, if single plane, jump to "read end cmd"
+(INST_MOVE  | (PLANE_END << 7) | PROC_REG1), //set "plane end number(R23)" to processor reg1
+(INST_JUMP  | (JUMP_EQFW << 8) |   11     ), //compare plane number, if plane fin, jump to "read end cmd"
+#endif
+(INST_OPRT  | (OPRT_ADD  << 7) | SET_PLANE), //add plane number
+(INST_WRITE | (READ_MTPL << 7) | NAND_CMD ), //send read multi-plane cmd(0x32) to NAND
+(INST_WRITE | (WAIT_TWB  << 7) | NAND_WAIT), //need wait tWB(80/90/100ns)
+(INST_WRITE | (READ_STS  << 7) | NAND_CMD ), //send read status cmd(0x70) to NAND
+(INST_WRITE | (0x0       << 7) | NAND_READ), //read status
+#ifdef PROC_TDLY
+(INST_MOVE  | (NAND_RDT  << 7) | PROC_REG0), //dummy read for FPGA timing issue
+#endif
+(INST_MOVE  | (NAND_RDT  << 7) | PROC_REG0), //copy NAND read data to processor reg0
+(INST_WRITE | (STS_RDY   << 7) | PROC_REG1), //set nand_ready_bitmap(0x60) to processor reg1
+(INST_OPRT  | (OPRT_AND  << 7) | PROC_REG0), //sts_data & nand_ready_bitmap(0x60)
+#ifdef PROC_TDLY
+(INST_JUMP  | (JUMP_EQBK << 8) |   20     ), //check whether NAND ready, if ready, jump back to "read cmd"
+(INST_JUMP  | (JUMP_NCBK << 8) |   7      ), //jump to "read status cmd"
+#else
+(INST_JUMP  | (JUMP_EQBK << 8) |   19     ), //check whether NAND ready, if ready, jump back to "read cmd"
+(INST_JUMP  | (JUMP_NCBK << 8) |   6      ), //jump to "read status cmd"
+#endif
+(INST_MOVE  | (CAH_STS   << 7) | PROC_REG0), //copy "cache status" to processor reg0
+(INST_WRITE | (RCAH_SET  << 7) | PROC_REG1), //set "cache read set" to processor reg1
+(INST_JUMP  | (JUMP_EQFW << 8) |   3      ), //compare cache status, if cache read set, jump to "cache read cmd"
+(INST_WRITE | (READ_END  << 7) | NAND_CMD ), //send read end(0x30) to NAND
+// (INST_WRITE | (RDCM_CHOS << 7) | STS_CHOS ), //chose status check bit
+(INST_JUMP  | (JUMP_NCFW << 8) |   2      ), //jump to "set nand status"
+(INST_WRITE | (RCAH_CMD  << 7) | NAND_CMD ), //send cache read(0x31) to NAND
+// (INST_WRITE | (CARD_CHOS << 7) | STS_CHOS ), //chose status check bit
+(INST_WRITE | (BUSY_BIT  << 7) | SET_BUSY ), //set nand status as busy
+(INST_FIN                                  ) //finish
+}
+};
+

@@ -67,8 +67,8 @@ inline int hart0_slow_addr_load(long* p_last_load_result){
   // printf("%lx\n", &load_result);
   // printf("%d\n", __LINE__);
   asm(
-    "fsqrt.d f0, f1\n"
-    "fcvt.l.d a1, f0\n"
+    //"fsqrt.d f0, f1\n"
+    //"fcvt.l.d a1, f0\n"
     "srli a1, a1, 24\n"
     "srli a1, a1, 24\n"
     "srli a1, a1, 24\n"
@@ -126,7 +126,9 @@ int main(){
       // write hart_ctrl_reset_reg
       *(long*)((long)HART_CTRL_RESET_REG_BASE + 1 * 8) = 0;
       // waiting for hart 1 to update core_init_flag[1]
+      //printf("wait\n");
       while(!core_init_flag[1]){};
+      //printf("pass\n");
       // hart 1 has started up. run real workload
       hart0_workload();
       assert(0);

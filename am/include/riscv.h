@@ -55,6 +55,9 @@ enum { MODE_U = 0, MODE_S, MODE_H, MODE_M };
 #define SCAUSE_SEIP 0x9
 // Exception
 #define SCAUSE_SECALL 0x9
+// Multicore
+#define MULTICORE 2
+#define BOARDZYNQ
 #endif
 
 #endif

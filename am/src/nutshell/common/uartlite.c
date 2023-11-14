@@ -1,5 +1,6 @@
 #include <riscv.h>
 
+#ifndef BOARDZYNQ
 #define UARTLITE_MMIO 0x40600000
 #define UARTLITE_RX_FIFO  0x0
 #define UARTLITE_TX_FIFO  0x4
@@ -9,6 +10,17 @@
 #define UARTLITE_RST_FIFO 0x03
 #define UARTLITE_TX_FULL  0x08
 #define UARTLITE_RX_VALID 0x01
+#else
+#define UARTLITE_MMIO 0xE0001000
+#define UARTLITE_RX_FIFO  0x0
+#define UARTLITE_TX_FIFO  0x30
+#define UARTLITE_STAT_REG 0x2c
+#define UARTLITE_CTRL_REG 0x0
+
+#define UARTLITE_RST_FIFO 0x03
+#define UARTLITE_TX_FULL  0x10
+#define UARTLITE_RX_VALID 0x01
+#endif
 
 void __am_init_uartlite(void) {
   outb(UARTLITE_MMIO + UARTLITE_CTRL_REG, UARTLITE_RST_FIFO);

@@ -1,0 +1,571 @@
+(gdb) info variables
+All defined variables:
+
+File /nfs/home/fuwenyi/xiaohe/nexus-am/am/src/nutshell/isa/riscv/trm.c:
+6:      volatile int core_init_flag[16];   0x800099c0
+
+File /nfs/home/fuwenyi/xiaohe/nexus-am/apps/coremark-mt/src/cmark_mt.c:
+2230:   volatile char __whisper_console_io;    0x80009a00
+2201:   ee_u32 default_num_contexts;   0x80008a10
+2117:   volatile ee_s32 seed1_volatile;    0x80009a20
+2118:   volatile ee_s32 seed2_volatile;
+2119:   volatile ee_s32 seed3_volatile;
+2126:   volatile ee_s32 seed4_volatile;
+2128:   volatile ee_s32 seed5_volatile;
+971:    ee_u8 static_memblk0[2000];    0x80008a20
+972:    ee_u8 static_memblk1[2000];    0x800091f0
+12:     volatile int tohost;      0x80009a24
+1717:   static ee_u8 *errpat[4];    0x80008180
+1715:   static ee_u8 *floatpat[4];    0x80008140
+1714:   static ee_u8 *intpat[4];    0x80008120
+938:    static ee_u16 list_known_crc[5];    0x800081a0
+939:    static ee_u16 matrix_known_crc[5];   0x800081b0
+1716:   static ee_u8 *scipat[4];    0x80008160
+2151:   static clock_t start_time_val;    0x80009a10
+940:    static ee_u16 state_known_crc[5];   0x800081c0 
+2151:   static clock_t stop_time_val;    0x80009a08
+
+Non-debugging symbols:
+0x80008725  __am_mainargs
+0x80008928  pow10
+0x80008a10  _data
+0x80008a10  edata
+0x80008a20  _bss_start
+0x8000a000  _stack_top
+0x80012000  _end
+0x80012000  _stack_pointer
+0x80012000  end
+
+
+coremark-mt-riscv64-nutshell.elf:     file format elf64-little
+
+SYMBOL TABLE:
+0000000080000000 l    d  .text  0000000000000000 .text
+0000000080005d68 l    d  .text.startup  0000000000000000 .text.startup
+00000000800069a4 l    d  .text._putc    0000000000000000 .text._putc
+00000000800069a8 l    d  .text._halt    0000000000000000 .text._halt
+00000000800069cc l    d  .text._trm_init        0000000000000000 .text._trm_init
+0000000080006a38 l    d  .text.__am_init_uartlite       0000000000000000 .text.__am_init_uartlite
+0000000080006a48 l    d  .text.__am_uartlite_putchar    0000000000000000 .text.__am_uartlite_putchar
+0000000080006a84 l    d  .text._out_null        0000000000000000 .text._out_null
+0000000080006a88 l    d  .text._out_rev 0000000000000000 .text._out_rev
+0000000080006bc4 l    d  .text._ntoa_long       0000000000000000 .text._ntoa_long
+0000000080006f30 l    d  .text._out_char        0000000000000000 .text._out_char
+0000000080006f3c l    d  .text._ftoa    0000000000000000 .text._ftoa
+000000008000730c l    d  .text._etoa    0000000000000000 .text._etoa
+00000000800076ac l    d  .text._vsnprintf       0000000000000000 .text._vsnprintf
+000000008000802c l    d  .text.printf_  0000000000000000 .text.printf_
+0000000080008080 l    d  .rodata        0000000000000000 .rodata
+0000000080008978 l    d  .srodata.cst8  0000000000000000 .srodata.cst8
+0000000080008a10 l    d  .sdata 0000000000000000 .sdata
+0000000080008a20 l    d  .bss   0000000000000000 .bss
+0000000000000000 l    d  .debug_info    0000000000000000 .debug_info
+0000000000000000 l    d  .debug_abbrev  0000000000000000 .debug_abbrev
+0000000000000000 l    d  .debug_loc     0000000000000000 .debug_loc
+0000000000000000 l    d  .debug_aranges 0000000000000000 .debug_aranges
+0000000000000000 l    d  .debug_ranges  0000000000000000 .debug_ranges
+0000000000000000 l    d  .debug_line    0000000000000000 .debug_line
+0000000000000000 l    d  .debug_str     0000000000000000 .debug_str
+0000000000000000 l    d  .comment       0000000000000000 .comment
+0000000000000000 l    d  .riscv.attributes      0000000000000000 .riscv.attributes
+0000000000000000 l    d  .debug_frame   0000000000000000 .debug_frame
+0000000000000000 l    df *ABS*  0000000000000000 start.o
+0000000080000000 l       .text  0000000000000000 $x
+0000000080000018 l       .text  0000000000000000 setup_stack1
+0000000080000014 l       .text  0000000000000000 to_main
+0000000000000000 l    df *ABS*  0000000000000000 cmark_mt.c
+0000000080000024 l       .text  0000000000000000 $x
+0000000080005d68 l       .text.startup  0000000000000000 $x
+0000000080009a10 l     O .bss   0000000000000008 start_time_val
+0000000080009a08 l     O .bss   0000000000000008 stop_time_val
+0000000080005ee0 l       .text.startup  0000000000000000 __perf_start
+0000000080005ee8 l       .text.startup  0000000000000000 __perf_end
+0000000080008120 l     O .rodata        0000000000000020 intpat
+0000000080008140 l     O .rodata        0000000000000020 floatpat
+0000000080008160 l     O .rodata        0000000000000020 scipat
+0000000080008180 l     O .rodata        0000000000000020 errpat
+00000000800081a0 l     O .rodata        000000000000000a list_known_crc
+00000000800081b0 l     O .rodata        000000000000000a matrix_known_crc
+00000000800081c0 l     O .rodata        000000000000000a state_known_crc
+0000000000000000 l    df *ABS*  0000000000000000 trm.c
+00000000800069a4 l       .text._putc    0000000000000000 $x
+00000000800069a8 l       .text._halt    0000000000000000 $x
+00000000800069b8 l       .text._halt    0000000000000000 $d
+00000000800069bc l       .text._halt    0000000000000000 $x
+00000000800069cc l       .text._trm_init        0000000000000000 $x
+0000000000000000 l    df *ABS*  0000000000000000 uartlite.c
+0000000080006a38 l       .text.__am_init_uartlite       0000000000000000 $x
+0000000080006a48 l       .text.__am_uartlite_putchar    0000000000000000 $x
+0000000000000000 l    df *ABS*  0000000000000000 printf.c
+0000000080006a84 l     F .text._out_null        0000000000000004 _out_null
+0000000080006a84 l       .text._out_null        0000000000000000 $x
+0000000080006a88 l     F .text._out_rev 000000000000013c _out_rev
+0000000080006a88 l       .text._out_rev 0000000000000000 $x
+0000000080006bc4 l     F .text._ntoa_long       000000000000036c _ntoa_long
+0000000080006bc4 l       .text._ntoa_long       0000000000000000 $x
+0000000080006bc4 l     F .text._ntoa_long       000000000000036c _ntoa_long_long
+0000000080006f30 l     F .text._out_char        000000000000000c _out_char
+0000000080006f30 l       .text._out_char        0000000000000000 $x
+0000000080006f3c l     F .text._ftoa    00000000000003d0 _ftoa
+0000000080006f3c l       .text._ftoa    0000000000000000 $x
+000000008000730c l     F .text._etoa    00000000000003a0 _etoa
+000000008000730c l       .text._etoa    0000000000000000 $x
+00000000800076ac l     F .text._vsnprintf       0000000000000980 _vsnprintf
+00000000800076ac l       .text._vsnprintf       0000000000000000 $x
+000000008000802c l       .text.printf_  0000000000000000 $x
+0000000080008928 l     O .rodata        0000000000000050 pow10.0
+0000000080009a20 g     O .bss   0000000000000004 seed1_volatile
+0000000080000094 g     F .text  00000000000002a8 core_list_init
+00000000800069cc g     F .text._trm_init        000000000000006c _trm_init
+000000008000517c g     F .text  0000000000000524 crcu32
+0000000080005930 g     F .text  0000000000000008 check_data_types
+000000008000594c g     F .text  0000000000000014 stop_time
+0000000080012000 g       .bss   0000000000000000 _stack_pointer
+000000008000043c g     F .text  0000000000000024 core_list_reverse
+0000000080004ef4 g     F .text  0000000000000288 crcu16
+0000000088000000 g       *ABS*  0000000000000000 _pmem_end
+00000000800069a4 g     F .text._putc    0000000000000004 _putc
+0000000080005d68 g       .text  0000000000000000 _etext
+0000000080001944 g     F .text  000000000000009c matrix_sum
+0000000080005990 g     F .text  0000000000000008 portable_fini
+00000000800005c0 g     F .text  0000000000000f58 matrix_test
+0000000080005960 g     F .text  0000000000000018 get_time
+00000000800023a4 g     F .text  0000000000000a10 core_bench_state
+0000000080003ff8 g     F .text  00000000000008b0 core_bench_list
+00000000800019e0 g     F .text  0000000000000058 matrix_mul_const
+0000000080000000 g       *ABS*  0000000000000000 _pmem_start
+0000000080006a38 g     F .text.__am_init_uartlite       0000000000000010 __am_init_uartlite
+0000000080009a00 g     O .bss   0000000000000001 __whisper_console_io
+0000000080008a18 g     O .sdata 0000000000000004 seed3_volatile
+0000000080008a20 g       .bss   0000000000000000 _bss_start
+0000000080008a10 g       .srodata.cst8  0000000000000000 edata
+0000000080008a20 g     O .bss   00000000000007d0 static_memblk0
+0000000080008a14 g     O .sdata 0000000000000004 seed4_volatile
+00000000800048a8 g     F .text  00000000000004a8 iterate
+0000000080001af8 g     F .text  00000000000000a4 matrix_mul_matrix
+0000000080005d28 g     F .text  0000000000000040 whisperPrintf
+00000000800033e8 g     F .text  0000000000000c10 cmp_complex
+000000008000208c g     F .text  0000000000000318 core_state_transition
+0000000080012000 g       .bss   0000000000000000 _heap_start
+000000008000a000 g       .bss   0000000000000000 _stack_top
+0000000080001518 g     F .text  00000000000002c4 core_bench_matrix
+0000000080000460 g     F .text  000000000000014c core_list_mergesort
+0000000080012000 g       .bss   0000000000000000 end
+0000000080005938 g     F .text  0000000000000014 start_time
+00000000800099c0 g     O .bss   0000000000000040 core_init_flag
+0000000080005d68 g       .text  0000000000000000 etext
+0000000080009a18 g     O .bss   0000000000000004 seed5_volatile
+0000000080000000 g     F .text  0000000000000000 _start
+000000008000039c g     F .text  0000000000000028 core_list_remove
+00000000800056a0 g     F .text  0000000000000290 crc16
+0000000080000080 g     F .text  0000000000000014 copy_info
+00000000800003c4 g     F .text  0000000000000020 core_list_undo_remove
+00000000800091f0 g     O .bss   00000000000007d0 static_memblk1
+0000000080005d68 g     F .text.startup  0000000000000c3c main
+0000000080004d50 g     F .text  0000000000000068 get_seed_32
+0000000080000000 g       *ABS*  0000000000000000 pmem_base
+0000000080004db8 g     F .text  000000000000013c crcu8
+0000000080001b9c g     F .text  00000000000000b8 matrix_mul_matrix_bitextract
+0000000080008a10 g       .srodata.cst8  0000000000000000 _data
+000000008000033c g     F .text  0000000000000060 core_list_insert_new
+00000000800005b8 g     F .text  0000000000000008 riscvPause
+0000000080005984 g     F .text  000000000000000c portable_init
+00000000800017dc g     F .text  0000000000000168 core_init_matrix
+0000000080006a48 g     F .text.__am_uartlite_putchar    000000000000003c __am_uartlite_putchar
+00000000800005ac g     F .text  000000000000000c getHartId
+000000008000802c g     F .text.printf_  0000000000000054 printf_
+0000000080008725 g       .rodata        0000000000000000 __am_mainargs
+0000000080001a88 g     F .text  0000000000000070 matrix_mul_vect
+0000000080012000 g       .bss   0000000000000000 _end
+0000000080009a24 g     O .bss   0000000000000004 tohost
+0000000080001a38 g     F .text  0000000000000050 matrix_add_const
+0000000080001c54 g     F .text  0000000000000438 core_init_state
+0000000080005978 g     F .text  000000000000000c time_in_secs
+0000000080009a1c g     O .bss   0000000000000004 seed2_volatile
+00000000800069a8 g     F .text._halt    0000000000000024 _halt
+00000000800003e4 g     F .text  0000000000000058 core_list_find
+0000000080005998 g     F .text  0000000000000390 whisperPrintfImpl
+0000000080000024 g     F .text  000000000000005c cmp_idx
+0000000080002db4 g     F .text  0000000000000634 calc_func
+0000000080008a10 g     O .sdata 0000000000000004 default_num_contexts
+
+Breakpoint 1 at 0x800077e0: file /nfs/home/fuwenyi/xiaohe/nexus-am/libs/klib/src/printf.c, line 647.
+static int _vsnprintf(out_fct_type out, char* buffer, const size_t maxlen, const char* format, va_list va) -> format
+printf_  printf
+
+
+
+
+SYMBOL TABLE:
+0000000080000000 l    d  .text  0000000000000000 .text
+0000000080005d68 l    d  .text.startup  0000000000000000 .text.startup
+00000000800069a4 l    d  .text._putc    0000000000000000 .text._putc
+00000000800069a8 l    d  .text._halt    0000000000000000 .text._halt
+00000000800069cc l    d  .text._trm_init        0000000000000000 .text._trm_init
+0000000080006a38 l    d  .text.__am_init_uartlite       0000000000000000 .text.__am_init_uartlite
+0000000080006a48 l    d  .text.__am_uartlite_putchar    0000000000000000 .text.__am_uartlite_putchar
+0000000080006a84 l    d  .text._out_null        0000000000000000 .text._out_null
+0000000080006a88 l    d  .text._out_rev 0000000000000000 .text._out_rev
+0000000080006bc4 l    d  .text._ntoa_long       0000000000000000 .text._ntoa_long
+0000000080006f30 l    d  .text._out_char        0000000000000000 .text._out_char
+0000000080006f3c l    d  .text._ftoa    0000000000000000 .text._ftoa
+000000008000730c l    d  .text._etoa    0000000000000000 .text._etoa
+00000000800076ac l    d  .text._vsnprintf       0000000000000000 .text._vsnprintf
+000000008000802c l    d  .text.printf_  0000000000000000 .text.printf_
+0000000080008080 l    d  .rodata        0000000000000000 .rodata
+0000000080008978 l    d  .srodata.cst8  0000000000000000 .srodata.cst8
+0000000080008a10 l    d  .sdata 0000000000000000 .sdata
+0000000080008a20 l    d  .bss   0000000000000000 .bss
+0000000000000000 l    d  .debug_info    0000000000000000 .debug_info
+0000000000000000 l    d  .debug_abbrev  0000000000000000 .debug_abbrev
+0000000000000000 l    d  .debug_loc     0000000000000000 .debug_loc
+0000000000000000 l    d  .debug_aranges 0000000000000000 .debug_aranges
+0000000000000000 l    d  .debug_ranges  0000000000000000 .debug_ranges
+0000000000000000 l    d  .debug_line    0000000000000000 .debug_line
+0000000000000000 l    d  .debug_str     0000000000000000 .debug_str
+0000000000000000 l    d  .comment       0000000000000000 .comment
+0000000000000000 l    d  .riscv.attributes      0000000000000000 .riscv.attributes
+0000000000000000 l    d  .debug_frame   0000000000000000 .debug_frame
+0000000000000000 l    df *ABS*  0000000000000000 start.o
+0000000080000000 l       .text  0000000000000000 $x
+0000000080000018 l       .text  0000000000000000 setup_stack1
+0000000080000014 l       .text  0000000000000000 to_main
+0000000000000000 l    df *ABS*  0000000000000000 cmark_mt.c
+0000000080000024 l       .text  0000000000000000 $x
+0000000080005d68 l       .text.startup  0000000000000000 $x
+0000000080009a10 l     O .bss   0000000000000008 start_time_val
+0000000080009a08 l     O .bss   0000000000000008 stop_time_val
+0000000080005ee0 l       .text.startup  0000000000000000 __perf_start
+0000000080005ee8 l       .text.startup  0000000000000000 __perf_end
+0000000080008120 l     O .rodata        0000000000000020 intpat
+0000000080008140 l     O .rodata        0000000000000020 floatpat
+0000000080008160 l     O .rodata        0000000000000020 scipat
+0000000080008180 l     O .rodata        0000000000000020 errpat
+00000000800081a0 l     O .rodata        000000000000000a list_known_crc
+00000000800081b0 l     O .rodata        000000000000000a matrix_known_crc
+00000000800081c0 l     O .rodata        000000000000000a state_known_crc
+0000000000000000 l    df *ABS*  0000000000000000 trm.c
+00000000800069a4 l       .text._putc    0000000000000000 $x
+00000000800069a8 l       .text._halt    0000000000000000 $x
+00000000800069b8 l       .text._halt    0000000000000000 $d
+00000000800069bc l       .text._halt    0000000000000000 $x
+00000000800069cc l       .text._trm_init        0000000000000000 $x
+0000000000000000 l    df *ABS*  0000000000000000 uartlite.c
+0000000080006a38 l       .text.__am_init_uartlite       0000000000000000 $x
+0000000080006a48 l       .text.__am_uartlite_putchar    0000000000000000 $x
+0000000000000000 l    df *ABS*  0000000000000000 printf.c
+0000000080006a84 l     F .text._out_null        0000000000000004 _out_null
+0000000080006a84 l       .text._out_null        0000000000000000 $x
+0000000080006a88 l     F .text._out_rev 000000000000013c _out_rev
+0000000080006a88 l       .text._out_rev 0000000000000000 $x
+0000000080006bc4 l     F .text._ntoa_long       000000000000036c _ntoa_long
+0000000080006bc4 l       .text._ntoa_long       0000000000000000 $x
+0000000080006bc4 l     F .text._ntoa_long       000000000000036c _ntoa_long_long
+0000000080006f30 l     F .text._out_char        000000000000000c _out_char
+0000000080006f30 l       .text._out_char        0000000000000000 $x
+0000000080006f3c l     F .text._ftoa    00000000000003d0 _ftoa
+0000000080006f3c l       .text._ftoa    0000000000000000 $x
+000000008000730c l     F .text._etoa    00000000000003a0 _etoa
+000000008000730c l       .text._etoa    0000000000000000 $x
+00000000800076ac l     F .text._vsnprintf       0000000000000980 _vsnprintf
+00000000800076ac l       .text._vsnprintf       0000000000000000 $x
+000000008000802c l       .text.printf_  0000000000000000 $x
+0000000080008928 l     O .rodata        0000000000000050 pow10.0
+0000000080009a20 g     O .bss   0000000000000004 seed1_volatile
+0000000080000094 g     F .text  00000000000002a8 core_list_init
+00000000800069cc g     F .text._trm_init        000000000000006c _trm_init
+000000008000517c g     F .text  0000000000000524 crcu32
+0000000080005930 g     F .text  0000000000000008 check_data_types
+000000008000594c g     F .text  0000000000000014 stop_time
+0000000080012000 g       .bss   0000000000000000 _stack_pointer
+000000008000043c g     F .text  0000000000000024 core_list_reverse
+0000000080004ef4 g     F .text  0000000000000288 crcu16
+0000000088000000 g       *ABS*  0000000000000000 _pmem_end
+00000000800069a4 g     F .text._putc    0000000000000004 _putc
+0000000080005d68 g       .text  0000000000000000 _etext
+0000000080001944 g     F .text  000000000000009c matrix_sum
+0000000080005990 g     F .text  0000000000000008 portable_fini
+00000000800005c0 g     F .text  0000000000000f58 matrix_test
+0000000080005960 g     F .text  0000000000000018 get_time
+00000000800023a4 g     F .text  0000000000000a10 core_bench_state
+0000000080003ff8 g     F .text  00000000000008b0 core_bench_list
+00000000800019e0 g     F .text  0000000000000058 matrix_mul_const
+0000000080000000 g       *ABS*  0000000000000000 _pmem_start
+0000000080006a38 g     F .text.__am_init_uartlite       0000000000000010 __am_init_uartlite
+0000000080009a00 g     O .bss   0000000000000001 __whisper_console_io
+0000000080008a18 g     O .sdata 0000000000000004 seed3_volatile
+0000000080008a20 g       .bss   0000000000000000 _bss_start
+0000000080008a10 g       .srodata.cst8  0000000000000000 edata
+0000000080008a20 g     O .bss   00000000000007d0 static_memblk0
+0000000080008a14 g     O .sdata 0000000000000004 seed4_volatile
+00000000800048a8 g     F .text  00000000000004a8 iterate
+0000000080001af8 g     F .text  00000000000000a4 matrix_mul_matrix
+0000000080005d28 g     F .text  0000000000000040 whisperPrintf
+00000000800033e8 g     F .text  0000000000000c10 cmp_complex
+000000008000208c g     F .text  0000000000000318 core_state_transition
+0000000080012000 g       .bss   0000000000000000 _heap_start
+000000008000a000 g       .bss   0000000000000000 _stack_top
+0000000080001518 g     F .text  00000000000002c4 core_bench_matrix
+0000000080000460 g     F .text  000000000000014c core_list_mergesort
+0000000080012000 g       .bss   0000000000000000 end
+0000000080005938 g     F .text  0000000000000014 start_time
+00000000800099c0 g     O .bss   0000000000000040 core_init_flag
+0000000080005d68 g       .text  0000000000000000 etext
+0000000080009a18 g     O .bss   0000000000000004 seed5_volatile
+0000000080000000 g     F .text  0000000000000000 _start
+000000008000039c g     F .text  0000000000000028 core_list_remove
+00000000800056a0 g     F .text  0000000000000290 crc16
+0000000080000080 g     F .text  0000000000000014 copy_info
+00000000800003c4 g     F .text  0000000000000020 core_list_undo_remove
+00000000800091f0 g     O .bss   00000000000007d0 static_memblk1
+0000000080005d68 g     F .text.startup  0000000000000c3c main
+0000000080004d50 g     F .text  0000000000000068 get_seed_32
+0000000080000000 g       *ABS*  0000000000000000 pmem_base
+0000000080004db8 g     F .text  000000000000013c crcu8
+0000000080001b9c g     F .text  00000000000000b8 matrix_mul_matrix_bitextract
+0000000080008a10 g       .srodata.cst8  0000000000000000 _data
+000000008000033c g     F .text  0000000000000060 core_list_insert_new
+00000000800005b8 g     F .text  0000000000000008 riscvPause
+0000000080005984 g     F .text  000000000000000c portable_init
+00000000800017dc g     F .text  0000000000000168 core_init_matrix
+0000000080006a48 g     F .text.__am_uartlite_putchar    000000000000003c __am_uartlite_putchar
+00000000800005ac g     F .text  000000000000000c getHartId
+000000008000802c g     F .text.printf_  0000000000000054 printf_
+0000000080008725 g       .rodata        0000000000000000 __am_mainargs
+0000000080001a88 g     F .text  0000000000000070 matrix_mul_vect
+0000000080012000 g       .bss   0000000000000000 _end
+0000000080009a24 g     O .bss   0000000000000004 tohost
+0000000080001a38 g     F .text  0000000000000050 matrix_add_const
+0000000080001c54 g     F .text  0000000000000438 core_init_state
+0000000080005978 g     F .text  000000000000000c time_in_secs
+0000000080009a1c g     O .bss   0000000000000004 seed2_volatile
+00000000800069a8 g     F .text._halt    0000000000000024 _halt
+00000000800003e4 g     F .text  0000000000000058 core_list_find
+0000000080005998 g     F .text  0000000000000390 whisperPrintfImpl
+0000000080000024 g     F .text  000000000000005c cmp_idx
+0000000080002db4 g     F .text  0000000000000634 calc_func
+0000000080008a10 g     O .sdata 0000000000000004 default_num_contexts
+
+
+0000000080008120 l     O .rodata        0000000000000020 intpat
+0000000080008140 l     O .rodata        0000000000000020 floatpat
+0000000080008160 l     O .rodata        0000000000000020 scipat
+0000000080008180 l     O .rodata        0000000000000020 errpat
+00000000800081a0 l     O .rodata        000000000000000a list_known_crc
+00000000800081b0 l     O .rodata        000000000000000a matrix_known_crc
+00000000800081c0 l     O .rodata        000000000000000a state_known_crc
+0000000080008725 g       .rodata        0000000000000000 __am_mainargs
+0000000080008080 l    d  .rodata        0000000000000000 .rodata
+0000000080008928 l     O .rodata        0000000000000050 pow10.0
+
+
+Line 67 of "/nfs/home/fuwenyi/xiaohe/nexus-am/am/src/nutshell/isa/riscv/trm.c" starts at address 0x800069f8 <_trm_init+40>
+   and ends at 0x80006a04 <_trm_init+52>.
+
+Line 354 of "/nfs/home/fuwenyi/xiaohe/nexus-am/libs/klib/src/printf.c" starts at address 0x80007100 <_ftoa+448>
+   and ends at 0x80007140 <_ftoa+512>.
+
+return _out_rev(out, buffer, idx, maxlen, (flags & FLAGS_PLUS) ? "fni+" : "fni", (flags & FLAGS_PLUS) ? 4U : 3U, width, flags);
+
+Line 350 of "/nfs/home/fuwenyi/xiaohe/nexus-am/libs/klib/src/printf.c" starts at address 0x80007140 <_ftoa+512>
+   and ends at 0x80007154 <_ftoa+532>.
+
+return _out_rev(out, buffer, idx, maxlen, "nan", 3, width, flags);
+
+Line 444 of "/nfs/home/fuwenyi/xiaohe/nexus-am/libs/klib/src/printf.c" starts at address 0x800071f0 <_ftoa+688>
+   and ends at 0x8000720c <_ftoa+716>.
+
+while ((len < width) && (len < PRINTF_FTOA_BUFFER_SIZE))
+
+Line 352 of "/nfs/home/fuwenyi/xiaohe/nexus-am/libs/klib/src/printf.c" starts at address 0x80007240 <_ftoa+768>
+   and ends at 0x80007254 <_ftoa+788>.
+
+return _out_rev(out, buffer, idx, maxlen, "fni-", 4, width, flags);
+
+Line 587 of "/nfs/home/fuwenyi/xiaohe/nexus-am/libs/klib/src/printf.c" starts at address 0x80007708 <_vsnprintf+88>
+   and ends at 0x80007738 <_vsnprintf+136>.
+
+while (*format)
+
+Line 647 of "/nfs/home/fuwenyi/xiaohe/nexus-am/libs/klib/src/printf.c" starts at address 0x800077c4 <_vsnprintf+276>
+   and ends at 0x800077f0 <_vsnprintf+320>.
+
+switch (*format)
+
+Line 683 of "/nfs/home/fuwenyi/xiaohe/nexus-am/libs/klib/src/printf.c" starts at address 0x80007850 <_vsnprintf+416>
+   and ends at 0x8000788c <_vsnprintf+476>.
+
+switch (*format)
+
+
+Contents of section .rodata:
+ 80008088 28cdffff f8ccffff 04cdffff 10cdffff  (...............
+ 80008098 1ccdffff ecccffff 7cdaffff 7cd9ffff  ........|...|...
+ 800080a8 7cd9ffff 7cd9ffff 7cd9ffff 7cd9ffff  |...|...|...|...
+ 800080b8 7cd9ffff 7cd9ffff 7cd9ffff 7cd9ffff  |...|...|...|...
+ 800080c8 7cd9ffff 5cdcffff d4dbffff 7cd9ffff  |...\.......|...
+ 800080d8 40daffff 40daffff 7cd9ffff 7cd9ffff  @...@...|...|...
+ 800080e8 7cd9ffff 7cd9ffff 7cd9ffff 7cd9ffff  |...|...|...|...
+ 800080f8 7cd9ffff 78dbffff 7cd9ffff 7cd9ffff  |...x...|...|...
+ 80008108 7cd9ffff 50dbffff 7cd9ffff e0daffff  |...P...|.......
+ 80008118 7cd9ffff 7cd9ffff 7cdaffff 00000000  |...|...|.......
+ 80008128 c0860080 00000000 c8860080 00000000  ................
+ 80008138 d0860080 00000000 d8860080 00000000  ................
+ 80008148 80860080 00000000 90860080 00000000  ................
+ 80008158 a0860080 00000000 b0860080 00000000  ................
+ 80008168 40860080 00000000 50860080 00000000  @.......P.......
+ 80008178 60860080 00000000 70860080 00000000  `.......p.......
+ 80008188 00860080 00000000 10860080 00000000  ................
+ 80008198 20860080 00000000 30860080 00000000   .......0.......
+ 800081a8 b0d44033 796a14e7 c1e30000 00000000  ..@3yj..........
+ 800081b8 52be9911 0856d71f 47070000 00000000  R....V..G.......
+ 800081c8 475ebf39 a4e53a8e 848d0000 00000000  G^.9..:.........
+ 800081d8 366b2070 6572666f 726d616e 63652072  6k performance r
+ 800081e8 756e2070 6172616d 65746572 7320666f  un parameters fo
+ 800081f8 7220636f 72656d61 726b2e0a 00000000  r coremark......
+ 80008208 366b2076 616c6964 6174696f 6e207275  6k validation ru
+ 80008218 6e207061 72616d65 74657273 20666f72  n parameters for
+ 80008228 20636f72 656d6172 6b2e0a00 00000000   coremark.......
+ 80008238 50726f66 696c6520 67656e65 72617469  Profile generati
+ 80008248 6f6e2072 756e2070 6172616d 65746572  on run parameter
+ 80008258 7320666f 7220636f 72656d61 726b2e0a  s for coremark..
+ 80008268 00000000 00000000 324b2070 6572666f  ........2K perfo
+ 80008278 726d616e 63652072 756e2070 6172616d  rmance run param
+ 80008288 65746572 7320666f 7220636f 72656d61  eters for corema
+ 80008298 726b2e0a 00000000 324b2076 616c6964  rk......2K valid
+ 800082a8 6174696f 6e207275 6e207061 72616d65  ation run parame
+ 800082b8 74657273 20666f72 20636f72 656d6172  ters for coremar
+ 800082c8 6b2e0a00 00000000 5b25755d 4552524f  k.......[%u]ERRO
+ 800082d8 5221206c 69737420 63726320 30782530  R! list crc 0x%0
+ 800082e8 3478202d 2073686f 756c6420 62652030  4x - should be 0
+ 800082f8 78253034 780a0000 5b25755d 4552524f  x%04x...[%u]ERRO
+ 80008308 5221206d 61747269 78206372 63203078  R! matrix crc 0x
+ 80008318 25303478 202d2073 686f756c 64206265  %04x - should be
+ 80008328 20307825 3034780a 00000000 00000000   0x%04x.........
+ 80008338 5b25755d 4552524f 52212073 74617465  [%u]ERROR! state
+ 80008348 20637263 20307825 30347820 2d207368   crc 0x%04x - sh
+ 80008358 6f756c64 20626520 30782530 34780a00  ould be 0x%04x..
+ 80008368 436f7265 4d61726b 2053697a 65202020  CoreMark Size   
+ 80008378 203a2025 640a0000 546f7461 6c207469   : %d...Total ti
+ 80008388 636b7320 20202020 203a2025 640a0000  cks      : %d...
+ 80008398 546f7461 6c207469 6d652028 73656373  Total time (secs
+ 800083a8 293a2025 640a0000 4552524f 5221204d  ): %d...ERROR! M
+ 800083b8 75737420 65786563 75746520 666f7220  ust execute for 
+ 800083c8 6174206c 65617374 20313020 73656373  at least 10 secs
+ 800083d8 20666f72 20612076 616c6964 20726573   for a valid res
+ 800083e8 756c7421 0a000000 49746572 61742f53  ult!....Iterat/S
+ 800083f8 65632f4d 487a2020 203a2025 64000000  ec/MHz   : %d...
+ 80008408 2e253032 640a0000 49746572 6174696f  .%02d...Iteratio
+ 80008418 6e732020 20202020 203a2025 640a0000  ns       : %d...
+ 80008428 47434331 302e322e 30000000 00000000  GCC10.2.0.......
+ 80008438 436f6d70 696c6572 20766572 73696f6e  Compiler version
+ 80008448 203a2025 730a0000 2d4f3200 00000000   : %s...-O2.....
+ 80008458 436f6d70 696c6572 20666c61 67732020  Compiler flags  
+ 80008468 203a2025 730a0000 53544154 49430000   : %s...STATIC..
+ 80008478 4d656d6f 7279206c 6f636174 696f6e20  Memory location 
+ 80008488 203a2025 730a0000 73656564 63726320   : %s...seedcrc 
+ 80008498 20202020 20202020 203a2030 78253034           : 0x%04
+ 800084a8 780a0000 00000000 5b25645d 6372636c  x.......[%d]crcl
+ 800084b8 69737420 20202020 20203a20 30782530  ist       : 0x%0
+ 800084c8 34780a00 00000000 5b25645d 6372636d  4x......[%d]crcm
+ 800084d8 61747269 78202020 20203a20 30782530  atrix     : 0x%0
+ 800084e8 34780a00 00000000 5b25645d 63726373  4x......[%d]crcs
+ 800084f8 74617465 20202020 20203a20 30782530  tate      : 0x%0
+ 80008508 34780a00 00000000 5b25645d 63726366  4x......[%d]crcf
+ 80008518 696e616c 20202020 20203a20 30782530  inal      : 0x%0
+ 80008528 34780a00 00000000 436f7272 65637420  4x......Correct 
+ 80008538 6f706572 6174696f 6e207661 6c696461  operation valida
+ 80008548 7465642e 20536565 20726561 646d652e  ted. See readme.
+ 80008558 74787420 666f7220 72756e20 616e6420  txt for run and 
+ 80008568 7265706f 7274696e 67207275 6c65732e  reporting rules.
+ 80008578 0a000000 00000000 4572726f 72732064  ........Errors d
+ 80008588 65746563 7465640a 00000000 00000000  etected.........
+ 80008598 43616e6e 6f742076 616c6964 61746520  Cannot validate 
+ 800085a8 6f706572 6174696f 6e20666f 72207468  operation for th
+ 800085b8 65736520 73656564 2076616c 7565732c  ese seed values,
+ 800085c8 20706c65 61736520 636f6d70 61726520   please compare 
+ 800085d8 77697468 20726573 756c7473 206f6e20  with results on 
+ 800085e8 61206b6e 6f776e20 706c6174 666f726d  a known platform
+ 800085f8 2e0a0000 00000000 54302e33 652d3146  ........T0.3e-1F
+ 80008608 00000000 00000000 2d542e54 2b2b5471  ........-T.T++Tq
+ 80008618 00000000 00000000 3154332e 3465347a  ........1T3.4e4z
+ 80008628 00000000 00000000 33342e30 652d545e  ........34.0e-T^
+ 80008638 00000000 00000000 352e3530 30652b33  ........5.500e+3
+ 80008648 00000000 00000000 2d2e3132 33652d32  ........-.123e-2
+ 80008658 00000000 00000000 2d383765 2b383332  ........-87e+832
+ 80008668 00000000 00000000 2b302e36 652d3132  ........+0.6e-12
+ 80008678 00000000 00000000 33352e35 34343030  ........35.54400
+ 80008688 00000000 00000000 2e313233 34353030  .........1234500
+ 80008698 00000000 00000000 2d313130 2e373030  ........-110.700
+ 800086a8 00000000 00000000 2b302e36 34343030  ........+0.64400
+ 800086b8 00000000 00000000 35303132 00000000  ........5012....
+ 800086c8 31323334 00000000 2d383734 00000000  1234....-874....
+ 800086d8 2b313232 00000000 53746174 69630000  +122....Static..
+ 800086e8 48656170 00000000 53746163 6b000000  Heap....Stack...
+ 800086f8 45786974 20776974 6820636f 6465203d  Exit with code =
+ 80008708 2025640a 00000000 68617274 20307825   %d.....hart 0x%
+ 80008718 78206861 73206e6f 7468696e 6720746f  x has nothing to
+ 80008728 20646f0a 00000000 666e6900 00000000   do.....fni.....
+ 80008738 666e692b 00000000 6e616e00 00000000  fni+....nan.....
+ 80008748 666e692d 00000000 e0f0ffff 44f0ffff  fni-........D...
+ 80008758 44f0ffff d0f0ffff 44f0ffff 44f0ffff  D.......D...D...
+ 80008768 44f0ffff 44f0ffff 44f0ffff 44f0ffff  D...D...D...D...
+ 80008778 44f0ffff c0f0ffff 44f0ffff b0f0ffff  D.......D.......
+ 80008788 44f0ffff 44f0ffff a0f0ffff d4f2ffff  D...D...........
+ 80008798 bcf0ffff acf0ffff bcf0ffff b4f2ffff  ................
+ 800087a8 bcf0ffff bcf0ffff bcf0ffff bcf0ffff  ................
+ 800087b8 bcf0ffff bcf0ffff bcf0ffff acf0ffff  ................
+ 800087c8 bcf0ffff bcf0ffff bcf0ffff bcf0ffff  ................
+ 800087d8 bcf0ffff acf0ffff 40f3ffff 58efffff  ........@...X...
+ 800087e8 58efffff 58efffff 58efffff 58efffff  X...X...X...X...
+ 800087f8 58efffff 58efffff 58efffff 58efffff  X...X...X...X...
+ 80008808 58efffff 58efffff 58efffff 58efffff  X...X...X...X...
+ 80008818 58efffff 58efffff 58efffff 58efffff  X...X...X...X...
+ 80008828 58efffff 58efffff 58efffff 58efffff  X...X...X...X...
+ 80008838 58efffff 58efffff 58efffff 58efffff  X...X...X...X...
+ 80008848 58efffff 58efffff 58efffff 58efffff  X...X...X...X...
+ 80008858 58efffff 58efffff b8f4ffff a4f2ffff  X...X...........
+ 80008868 b8f4ffff 58efffff 58efffff 58efffff  ....X...X...X...
+ 80008878 58efffff 58efffff 58efffff 58efffff  X...X...X...X...
+ 80008888 58efffff 58efffff 58efffff 58efffff  X...X...X...X...
+ 80008898 58efffff 58efffff 58efffff 58efffff  X...X...X...X...
+ 800088a8 58efffff b0f1ffff 58efffff 58efffff  X.......X...X...
+ 800088b8 58efffff 58efffff 58efffff 58efffff  X...X...X...X...
+ 800088c8 58efffff 58efffff 58efffff b0f1ffff  X...X...X.......
+ 800088d8 d8f2ffff b0f1ffff b8f4ffff a4f2ffff  ................
+ 800088e8 b8f4ffff 58efffff b0f1ffff 58efffff  ....X.......X...
+ 800088f8 58efffff 58efffff 58efffff 58efffff  X...X...X...X...
+ 80008908 b0f1ffff 08f4ffff 58efffff 58efffff  ........X...X...
+ 80008918 5cf3ffff 58efffff b0f1ffff 58efffff  \...X.......X...
+ 80008928 58efffff b0f1ffff 00000000 0000f03f  X..............?
+ 80008938 00000000 00002440 00000000 00005940  ......$@......Y@
+ 80008948 00000000 00408f40 00000000 0088c340  .....@.@.......@
+ 80008958 00000000 006af840 00000000 80842e41  .....j.@.......A
+ 80008968 00000000 d0126341 00000000 84d79741  ......cA.......A
+ 80008978 00000000 65cdcd41                    ....e..A 
+
+
+
+(Run type)
+(Buffer size)
+(platform dependent value)
+(actual time in seconds)
+(Performance value to report)
+(number of iterations used)
+(Compiler and version)	
+(Compiler and linker flags)
+(Memory Method)
+(identifier for the input seeds)
+(validation for list part)
+(validation for matrix part)
+(validation for state part)
+(iteration dependent output)
+(*Only when run is successful*)
+
+(Difftest emulation successful)
+
+
+
+
+
+
